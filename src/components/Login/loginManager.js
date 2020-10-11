@@ -25,6 +25,9 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
         success:true
     
       }
+
+    
+    setUserToken();
     
       return signInUser;
     
@@ -37,6 +40,13 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
     })
     }
     
+    const setUserToken=()=>{
+      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+        sessionStorage.setItem('token',idToken);
+      }).catch(function(error) {
+       
+      });
+    }
  
   export const handleFbSignIn=()=>{
     // Facebook provider..

@@ -37,24 +37,55 @@
 
 
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../../App';
+import { getDatabaseCart } from '../../utilities/databaseManager';
+import ProcessPayment from '../ProcessPayment/ProcessPayment';
 import './Shipment.css';
 
 const Shipment = () => {
     const { register, handleSubmit, watch, errors } = useForm();
     const [loggedInUser,setLoggedInUser] = useContext(UserContext);
-  const onSubmit = data => {
-      console.log('form submitted',data);}
+    const [shippingData,setShippingData]=useState(null)
+      // console.log('form submitted',data);
+      const onSubmit=data=>{
+       
+        setShippingData(data);
+      };
+      
+    
+    const handlePaymentSuccess=paymentId=>{
+      const saveCart=getDatabaseCart();
+      const orderDetails={...loggedInUser,
+        products:saveCart,
+        shipment:shippingData,
+        paymentId,
+        orderTime:new Date
+      };
 
+      fetch("http://localhost:5000/addOrder",{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(orderDetails)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data){
+          alert('your order success');
+        }
+      })
+    }
 
 
   console.log(watch("example")); // watch input value by passing the name of it
 
   return (
-   
-
+    <div className="row">
+      <div style={{display:shippingData?'none':'block'}} className="col-md-6">
+        
     <form className='ship-form' onSubmit={handleSubmit(onSubmit)}>
    
    <input name="name" defaultValue={loggedInUser.name} ref={register({ required: true })} placeholder= '     enter your name' />
@@ -70,8 +101,15 @@ const Shipment = () => {
       
       
       <input type="submit" />
-    </form>
-  );
-};
+    </form> 
+      </div>
+      <div style={{display:shippingData?'block':'none'}} className="col-md-6">
+        <h2>please pay for me</h2>
+        <ProcessPayment handlePayment={handlePaymentSuccess}></ProcessPayment>
+      </div>
+    </div>
+  )
+  };
+
 
 export default Shipment;
