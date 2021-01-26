@@ -10,7 +10,7 @@ const ProductDetail = () => {
     document.title="Product Detail"
 
     useEffect(()=>{
-        fetch('http://localhost:5000/product/'+productKey)
+        fetch('https://serene-crag-56062.herokuapp.com/product/'+productKey)
         .then(res=>res.json())
         .then(data=>
             setProduct(data),

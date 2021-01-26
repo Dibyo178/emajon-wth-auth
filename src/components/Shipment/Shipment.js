@@ -64,7 +64,7 @@ const Shipment = () => {
         orderTime:new Date
       };
 
-      fetch("http://localhost:5000/addOrder",{
+      fetch("https://serene-crag-56062.herokuapp.com/addOrder",{
         method:'POST',
         headers:{
           'Content-Type':'application/json'

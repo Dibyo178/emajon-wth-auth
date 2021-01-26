@@ -19,7 +19,7 @@ const Shop = () => {
 
     useEffect(()=>{
 
-        fetch('http://localhost:5000/products?search='+search)
+        fetch('https://serene-crag-56062.herokuapp.com/products?search='+search)
         .then(res=>res.json())
         .then(data=>{setProducts(data)
              alert(data.length)
@@ -40,7 +40,7 @@ const Shop = () => {
     //     } )
     //     setCart(previousCart);
     //     }
-    fetch('http://localhost:5000/productByKeys',{
+    fetch('https://serene-crag-56062.herokuapp.com/productByKeys',{
         method:'POST',
         headers:{
             'Content-Type':'application/json'
